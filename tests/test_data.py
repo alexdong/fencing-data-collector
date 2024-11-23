@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import List, Dict
 import random
 from models import (
     db, Clubs, Fencers, Bouts, Touches,

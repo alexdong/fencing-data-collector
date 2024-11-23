@@ -1,5 +1,8 @@
 from datetime import datetime
-from peewee import *
+from peewee import (
+    Model, SqliteDatabase, AutoField, CharField, 
+    DateTimeField, ForeignKeyField, IntegerField, TextField
+)
 
 # Enum choices
 ACTION_TYPES = ['attack', 'riposte', 'counter_attack', 'remise', 
@@ -56,8 +59,10 @@ CARDS = ['yellow', 'red', 'black', 'none']
 db = SqliteDatabase('fencing.db')
 
 class BaseModel(Model):
+    """Base model class that sets the database."""
     class Meta:
         database = db
+
 
 class Clubs(BaseModel):
     id = AutoField(primary_key=True)
