@@ -1,6 +1,58 @@
 from datetime import datetime
 from peewee import *
 
+# Enum choices
+ACTION_TYPES = ['attack', 'riposte', 'counter_attack', 'remise', 
+                'counter_riposte', 'renewal', 'point_in_line']
+
+FOOTWORK_TYPES = ['advance', 'retreat', 'double_advance', 'double_retreat',
+                  'jump_forward', 'jump_backward', 'fleche', 'none']
+
+FOOTWORK_COMBOS = ['advance_lunge', 'retreat_lunge', 'advance_fleche', 'patinando', 'none']
+
+BLADE_PREPS = ['engagement', 'beat', 'press', 'absence_of_blade', 'coupe', 'none']
+
+BLADE_DIRECTIONS = ['direct', 'indirect', 'circular', 'none']
+
+FEINT_TARGET_CHANGES = ['high_low', 'inside_outside', 'same_line', 'none']
+
+TAKING_BLADE_TYPES = ['none', 'bind', 'envelopment', 'croise', 'opposition']
+
+DISTANCES = ['close', 'medium', 'long']
+
+HIT_QUALITIES = ['clear', 'flat', 'grazing', 'missed']
+
+HIT_TIMINGS = ['immediate', 'delayed', 'stop_hit']
+
+HIT_LINES = ['high_outside', 'high_inside', 'low_outside', 'low_inside']
+
+HIT_TARGETS = ['toe', 'leg', 'hand', 'shoulder', 'chest', 'flank',
+               'arm', 'back', 'head', 'thigh']
+
+PISTE_POSITIONS = ['far_left', 'left', 'center', 'right', 'far_right']
+
+PARRY_TYPES = ['simple', 'circular', 'counter', 'semi_circular', 'none']
+
+PARRY_NUMBERS = ['4', '6', '7', '8', 'prime', 'none']
+
+PARRY_QUALITIES = ['clean', 'beat_parry', 'yielding', 'failed', 'none']
+
+EVASION_TYPES = ['distance', 'lateral', 'rotational', 'combined', 'none']
+
+EVASION_TIMINGS = ['before_attack', 'during_attack', 'after_attack', 'none']
+
+EVASION_SUCCESSES = ['avoided_hit', 'partial_avoid', 'failed', 'none']
+
+EVASION_FOLLOW_UPS = ['return_guard', 'change_distance', 'change_line', 'disengage', 'none']
+
+PRIORITIES = ['attack', 'defense', 'simultaneous', 'none']
+
+OUTCOME_QUALITIES = ['clean', 'unclear', 'disputed']
+
+REFEREE_CALLS = ['attack_touch', 'defense_touch', 'simultaneous', 'no_touch', 'card']
+
+CARDS = ['yellow', 'red', 'black', 'none']
+
 db = SqliteDatabase('fencing.db')
 
 class BaseModel(Model):
@@ -38,92 +90,43 @@ class Touches(BaseModel):
     scorer = CharField()  # 'A' or 'B' to indicate which fencer
 
     # Primary action
-    action_type = CharField(choices=[
-        'attack', 'riposte', 'counter_attack', 'remise', 
-        'counter_riposte', 'renewal', 'point_in_line'
-    ])
+    action_type = CharField(choices=ACTION_TYPES)
 
     # Preparation fields
-    prep_footwork = CharField(choices=[
-        'advance', 'retreat', 'double_advance', 'double_retreat',
-        'jump_forward', 'jump_backward', 'fleche', 'none'
-    ], default='none')
-    prep_footwork_combo = CharField(choices=[
-        'advance_lunge', 'retreat_lunge', 'advance_fleche', 'patinando', 'none'
-    ], default='none')
-    prep_blade = CharField(choices=[
-        'engagement', 'beat', 'press', 'absence_of_blade', 'coupe', 'none'
-    ], default='none')
-    prep_blade_direction = CharField(choices=[
-        'direct', 'indirect', 'circular', 'none'
-    ], default='none')
+    prep_footwork = CharField(choices=FOOTWORK_TYPES, default='none')
+    prep_footwork_combo = CharField(choices=FOOTWORK_COMBOS, default='none')
+    prep_blade = CharField(choices=BLADE_PREPS, default='none')
+    prep_blade_direction = CharField(choices=BLADE_DIRECTIONS, default='none')
     prep_feint_count = IntegerField(default=0)
-    prep_feint_target_changes = CharField(choices=[
-        'high_low', 'inside_outside', 'same_line', 'none'
-    ], default='none')
-    prep_taking_blade = CharField(choices=[
-        'none', 'bind', 'envelopment', 'croise', 'opposition'
-    ], default='none')
+    prep_feint_target_changes = CharField(choices=FEINT_TARGET_CHANGES, default='none')
+    prep_taking_blade = CharField(choices=TAKING_BLADE_TYPES, default='none')
 
     # Distance
-    distance = CharField(choices=['close', 'medium', 'long'], default='medium')
+    distance = CharField(choices=DISTANCES, default='medium')
 
     # Hit details
-    hit_quality = CharField(choices=[
-        'clear', 'flat', 'grazing', 'missed'
-    ], default='clear')
-    hit_timing = CharField(choices=[
-        'immediate', 'delayed', 'stop_hit'
-    ], default='immediate')
-    hit_line = CharField(choices=[
-        'high_outside', 'high_inside', 'low_outside', 'low_inside'
-    ], default='high_outside')
-    hit_target = CharField(choices=[
-        'toe', 'leg', 'hand', 'shoulder', 'chest', 'flank',
-        'arm', 'back', 'head', 'thigh'
-    ], default='chest')
-    hit_piste_position = CharField(choices=[
-        'far_left', 'left', 'center', 'right', 'far_right'
-    ], default='center')
+    hit_quality = CharField(choices=HIT_QUALITIES, default='clear')
+    hit_timing = CharField(choices=HIT_TIMINGS, default='immediate')
+    hit_line = CharField(choices=HIT_LINES, default='high_outside')
+    hit_target = CharField(choices=HIT_TARGETS, default='chest')
+    hit_piste_position = CharField(choices=PISTE_POSITIONS, default='center')
 
     # Defense details
-    defense_parry_type = CharField(choices=[
-        'simple', 'circular', 'counter', 'semi_circular', 'none'
-    ], default='none')
-    defense_parry_number = CharField(choices=[
-        '4', '6', '7', '8', 'prime', 'none'
-    ], default='none')
-    defense_parry_quality = CharField(choices=[
-        'clean', 'beat_parry', 'yielding', 'failed', 'none'
-    ], default='none')
+    defense_parry_type = CharField(choices=PARRY_TYPES, default='none')
+    defense_parry_number = CharField(choices=PARRY_NUMBERS, default='none')
+    defense_parry_quality = CharField(choices=PARRY_QUALITIES, default='none')
 
     # Body evasion
-    evasion_type = CharField(choices=[
-        'distance', 'lateral', 'rotational', 'combined', 'none'
-    ], default='none')
-    evasion_timing = CharField(choices=[
-        'before_attack', 'during_attack', 'after_attack', 'none'
-    ], default='none')
-    evasion_success = CharField(choices=[
-        'avoided_hit', 'partial_avoid', 'failed', 'none'
-    ], default='none')
-    evasion_follow_up = CharField(choices=[
-        'return_guard', 'change_distance', 'change_line', 'disengage', 'none'
-    ], default='none')
+    evasion_type = CharField(choices=EVASION_TYPES, default='none')
+    evasion_timing = CharField(choices=EVASION_TIMINGS, default='none')
+    evasion_success = CharField(choices=EVASION_SUCCESSES, default='none')
+    evasion_follow_up = CharField(choices=EVASION_FOLLOW_UPS, default='none')
 
     # Outcome
-    outcome_priority = CharField(choices=[
-        'attack', 'defense', 'simultaneous', 'none'
-    ], default='none')
-    outcome_quality = CharField(choices=[
-        'clean', 'unclear', 'disputed'
-    ], default='clean')
-    outcome_referee_call = CharField(choices=[
-        'attack_touch', 'defense_touch', 'simultaneous', 'no_touch', 'card'
-    ], default='attack_touch')
-    outcome_card = CharField(choices=[
-        'yellow', 'red', 'black', 'none'
-    ], default='none')
+    outcome_priority = CharField(choices=PRIORITIES, default='none')
+    outcome_quality = CharField(choices=OUTCOME_QUALITIES, default='clean')
+    outcome_referee_call = CharField(choices=REFEREE_CALLS, default='attack_touch')
+    outcome_card = CharField(choices=CARDS, default='none')
 
     # Video reference
     video_timestamp_start = CharField(default='')
