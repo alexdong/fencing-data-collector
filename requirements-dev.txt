@@ -1,0 +1,16 @@
+# Development tools
+ruff
+mypy
+pyright
+pytest
+pytest-cov
+
+# AI tools
+llm
+llm-claude-3
+aider-chat[playwright]
+anthropic
+
+# Audio recording and transcription
+pyaudio
+openai

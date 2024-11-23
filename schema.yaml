@@ -1,0 +1,49 @@
+context:
+  fencers: [fencer_a, fencer_b]
+  points: [integer, integer] 
+  seconds_elapsed: integer 
+  bout_type: [pool, de, practice, lesson]
+  bout_round: [1, 2, 3]
+
+video_reference:
+  timestamp_start: string
+  timestamp_end: string
+  video_id: string
+
+primary_action: [attack, riposte, counter_attack, remise, counter_riposte, renewal, point_in_line]
+
+preparation:
+  footwork: [advance, retreat, double_advance, double_retreat, jump_forward, jump_backward, fleche, none]
+  footwork_combinations: [advance_lunge, retreat_lunge, advance_fleche, patinando]
+  blade_preparation: [engagement, beat, press, absence_of_blade, coupe, none]
+  blade_direction: [direct, indirect, circular]
+  feint: 
+    number_of_feints: integer
+    target_changes: [high_low, inside_outside, same_line]
+  taking_blade: [none, bind, envelopment, croise, opposition]
+
+distance_when_action_started: [close, medium, long]
+
+hit_details:
+  hit_quality: [clear, flat, grazing, missed]
+  timing: [immediate, delayed, stop_hit]
+  line: [high_outside, high_inside, low_outside, low_inside]
+  specific_target: [toe, leg, hand, shoulder, chest, flank, arm, back, head, thigh]
+  piste_position: [far_left, left, center, right, far_right]
+
+defense:
+  parry: [simple, circular, counter, semi_circular]
+  parry_number: [4, 6, 7, 8, prime]
+  parry_quality: [clean, beat_parry, yielding, failed]
+
+body_evasion:
+  type: [distance, lateral, rotational, combined]
+  timing: [before_attack, during_attack, after_attack]
+  success: [avoided_hit, partial_avoid, failed]
+  follow_up: [return_guard, change_distance, change_line, disengage]
+
+outcome:
+  priority: [attack, defense, simultaneous, none]
+  quality: [clean, unclear, disputed]
+  referee_call: [attack_touch, defense_touch, simultaneous, no_touch, card]
+  cards: [yellow, red, black, none]
