@@ -1,3 +1,6 @@
+# DB
+*.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -106,3 +109,4 @@ venv/
 *.pyd
 pip-log.txt
 pip-delete-this-directory.txt
+.aider*

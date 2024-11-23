@@ -1,5 +1,5 @@
 model: claude-3-5-sonnet-20241022
-read: [Python.md, README.md, requirements.txt, schema.yml]
+read: [Python.md, README.md, requirements.txt, schema.yaml]
 cache-prompts: true
 cache-keepalive-pings: 2
 stream: false
