@@ -17,11 +17,8 @@ TOP_FENCERS = [
     ("Race Imboden", "Brooklyn FC"),
 ]
 
-def create_test_data():
+def create_test_data(database):
     """Create test data for top 10 fencers and 50 bouts"""
-    db.connect()
-    db.drop_tables([Touches, Bouts, Fencers, Clubs])
-    db.create_tables([Clubs, Fencers, Bouts, Touches])
 
     # Create clubs
     clubs = {}
@@ -82,4 +79,4 @@ def create_test_data():
     print("Test data created successfully!")
 
 if __name__ == '__main__':
-    create_test_data()
+    create_test_data(db)

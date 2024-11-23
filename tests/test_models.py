@@ -12,9 +12,16 @@ def test_db():
     # Bind model classes to test db
     for Model in (Clubs, Fencers, Bouts, Touches):
         Model._meta.database = test_db
-        
-    create_test_data()
+    
+    # Create tables
+    test_db.connect()
+    test_db.create_tables([Clubs, Fencers, Bouts, Touches])
+    
+    # Populate test data
+    create_test_data(test_db)
+    
     yield test_db
+    
     test_db.close()
 
 def test_club_creation(test_db):
