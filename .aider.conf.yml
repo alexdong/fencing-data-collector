@@ -3,7 +3,6 @@ read: [Python.md, README.md, requirements.txt, schema.yaml]
 cache-prompts: true
 cache-keepalive-pings: 2
 stream: false
-lint-cmd: ruff
 auto-test: true
 auto-commits: true
 
