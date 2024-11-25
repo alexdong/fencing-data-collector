@@ -1,6 +1,9 @@
 import pytest
 from peewee import SqliteDatabase
-from models import Clubs, Fencers, Bouts, Touches
+from models import (
+    Clubs, Fencers, Bouts, Touches,
+    ACTION_TYPES, DISTANCES, HIT_QUALITIES
+)
 from tests.test_data import create_test_data, TOP_FENCERS
 
 @pytest.fixture
