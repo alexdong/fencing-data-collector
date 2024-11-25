@@ -64,4 +64,4 @@ def test_touch_details(test_db):
         assert touch.scorer in ['A', 'B']
         assert touch.action_type in ['attack', 'riposte', 'counter_attack']
         assert touch.distance in ['close', 'medium', 'long']
-        assert touch.hit_quality in ['clear', 'flat', 'grazing']
+        assert touch.hit_quality in ['clear', 'flat', 'grazing', 'missed']
