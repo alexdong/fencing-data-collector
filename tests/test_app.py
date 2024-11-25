@@ -114,7 +114,7 @@ def test_record_touch(client, test_db):
     ).first()
     
     assert touch is not None
-    assert touch.action_type == 'attack'
+    assert touch.action_type == 'counter_attack'
 
 def test_invalid_bout_id(client, test_db):
     """Test accessing invalid bout IDs"""
