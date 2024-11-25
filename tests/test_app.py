@@ -100,7 +100,7 @@ def test_record_touch(client, test_db):
     touch_data = {
         'seconds_from_start': 10,
         'scorer': 'A',
-        'action_type': 'attack',
+        'action_type': 'counter_attack',
     }
     
     response = client.post(f'/api/bout/{bout.id}/touch', data=touch_data)
