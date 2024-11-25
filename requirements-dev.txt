@@ -4,6 +4,7 @@ mypy
 pyright
 pytest
 pytest-cov
+pytest-flask
 
 # AI tools
 llm
