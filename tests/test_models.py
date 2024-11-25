@@ -62,6 +62,6 @@ def test_touch_details(test_db):
         # Test required fields
         assert touch.seconds_from_start > 0
         assert touch.scorer in ['A', 'B']
-        assert touch.action_type in ['attack', 'riposte', 'counter_attack']
-        assert touch.distance in ['close', 'medium', 'long']
-        assert touch.hit_quality in ['clear', 'flat', 'grazing', 'missed']
+        assert touch.action_type in ACTION_TYPES
+        assert touch.distance in DISTANCES  
+        assert touch.hit_quality in HIT_QUALITIES

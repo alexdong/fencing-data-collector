@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow p-6">
+    <h1 class="text-2xl font-bold mb-4">Bout Details</h1>
+    
+    <div class="mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <span class="font-semibold">{{ bout.fencer_a.name }}</span>
+                vs
+                <span class="font-semibold">{{ bout.fencer_b.name }}</span>
+            </div>
+            <div class="text-gray-600">
+                {{ bout.date.strftime('%Y-%m-%d %H:%M') }}
+            </div>
+        </div>
+        <div class="mt-2">
+            <span class="font-bold text-xl">{{ bout.final_score_a }} - {{ bout.final_score_b }}</span>
+        </div>
+    </div>
+
+    <div class="mb-6">
+        <button id="start-timer" 
+                class="bg-green-500 text-white px-4 py-2 rounded mr-2"
+                hx-post="/api/bout/{{ bout.id }}/timer/start"
+                hx-swap="none">
+            Start Timer
+        </button>
+        <button id="stop-timer"
+                class="bg-red-500 text-white px-4 py-2 rounded"
+                hx-post="/api/bout/{{ bout.id }}/timer/stop"
+                hx-swap="none">
+            Stop Timer
+        </button>
+    </div>
+
+    <div id="touch-form" class="hidden">
+        <!-- Touch recording form will go here -->
+    </div>
+</div>
+{% endblock %}

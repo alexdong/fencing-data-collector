@@ -43,15 +43,15 @@ def filter_bouts():
 def export_csv():
     output = StringIO()
     writer = csv.writer(output)
-    writer.writerow(['Date', 'Fencer A', 'Fencer B', 'Score A', 'Score B'])
+    writer.writerow(['Date', 'Fencer A', 'Fencer B', 'Score', 'Event'])
     
     for bout in Bouts.select():
         writer.writerow([
             bout.date.strftime('%Y-%m-%d %H:%M'),
             bout.fencer_a.name,
             bout.fencer_b.name,
-            bout.final_score_a,
-            bout.final_score_b
+            f"{bout.final_score_a}-{bout.final_score_b}",
+            bout.event
         ])
     
     return output.getvalue(), 200, {
@@ -64,14 +64,14 @@ def start_timer(bout_id):
     bout = Bouts.get_or_none(Bouts.id == bout_id)
     if bout is None:
         return jsonify({'error': 'Bout not found'}), 404
-    return jsonify({'status': 'Timer started'})
+    return jsonify({'success': True, 'message': 'Timer started'})
 
 @app.route('/api/bout/<int:bout_id>/timer/stop', methods=['POST'])
 def stop_timer(bout_id):
     bout = Bouts.get_or_none(Bouts.id == bout_id)
     if bout is None:
         return jsonify({'error': 'Bout not found'}), 404
-    return jsonify({'status': 'Timer stopped'})
+    return jsonify({'success': True, 'message': 'Timer stopped'})
 
 @app.route('/api/bout/<int:bout_id>/touch', methods=['POST'])
 def record_touch(bout_id):
@@ -83,6 +83,10 @@ def record_touch(bout_id):
     if not all(field in request.form for field in required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
         
+    # Validate action_type
+    if request.form['action_type'] not in ['attack', 'riposte', 'counter_attack']:
+        return jsonify({'error': 'Invalid action type'}), 400
+        
     touch = Touches.create(
         bout=bout,
         seconds_from_start=request.form['seconds_from_start'],
@@ -90,7 +94,7 @@ def record_touch(bout_id):
         action_type=request.form['action_type']
     )
     
-    return jsonify({'status': 'Touch recorded', 'touch_id': touch.id})
+    return jsonify({'success': True, 'touch_id': touch.id})
 
 if __name__ == '__main__':
     db.connect()
