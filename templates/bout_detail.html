@@ -20,23 +20,47 @@
         </div>
     </div>
 
-    <div class="mb-6">
-        <button id="start-timer" 
-                class="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                hx-post="/api/bout/{{ bout.id }}/timer/start"
-                hx-swap="none">
-            Start Timer
-        </button>
-        <button id="stop-timer"
-                class="bg-red-500 text-white px-4 py-2 rounded"
-                hx-post="/api/bout/{{ bout.id }}/timer/stop"
-                hx-swap="none">
-            Stop Timer
-        </button>
-    </div>
-
-    <div id="touch-form" class="hidden">
-        <!-- Touch recording form will go here -->
+    <!-- Touches Table -->
+    <div class="bg-white p-6 rounded-lg shadow mt-6">
+        <h2 class="text-xl font-semibold mb-4">Touches</h2>
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scorer</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quality</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Defense</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evasion</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for touch in bout.touches %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.seconds_from_start }}s</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.scorer }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.action_type }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.hit_line }} - {{ touch.hit_target }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.hit_quality }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% if touch.defense_parry_type != 'none' %}
+                            {{ touch.defense_parry_type }} {{ touch.defense_parry_number }} ({{ touch.defense_parry_quality }})
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% if touch.evasion_type != 'none' %}
+                            {{ touch.evasion_type }} ({{ touch.evasion_success }})
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}
