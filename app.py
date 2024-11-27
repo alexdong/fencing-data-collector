@@ -2,11 +2,16 @@ from flask import Flask, render_template, jsonify, request
 import csv
 from io import StringIO
 from models import db, Clubs, Fencers, Bouts, Touches
+from tests.test_data import create_test_data
 
 app = Flask(__name__)
 
 @app.route('/')
 def list_bouts():
+    # Create test data if no bouts exist
+    if Bouts.select().count() == 0:
+        create_test_data(db)
+    
     clubs = Clubs.select()
     bouts = Bouts.select()
     return render_template('bout_list.html', bouts=bouts, clubs=clubs)
