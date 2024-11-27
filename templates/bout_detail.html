@@ -29,10 +29,13 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scorer</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quality</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preparation</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distance</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hit Details</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Defense</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evasion</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Outcome</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Video</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -41,20 +44,53 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ touch.seconds_from_start }}s</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ touch.scorer }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ touch.action_type }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.hit_line }} - {{ touch.hit_target }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.hit_quality }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div>Footwork: {{ touch.prep_footwork }}</div>
+                        <div>Combo: {{ touch.prep_footwork_combo }}</div>
+                        <div>Blade: {{ touch.prep_blade }} ({{ touch.prep_blade_direction }})</div>
+                        <div>Feints: {{ touch.prep_feint_count }} ({{ touch.prep_feint_target_changes }})</div>
+                        <div>Taking Blade: {{ touch.prep_taking_blade }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ touch.distance }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div>Quality: {{ touch.hit_quality }}</div>
+                        <div>Timing: {{ touch.hit_timing }}</div>
+                        <div>Line: {{ touch.hit_line }}</div>
+                        <div>Target: {{ touch.hit_target }}</div>
+                        <div>Position: {{ touch.hit_piste_position }}</div>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         {% if touch.defense_parry_type != 'none' %}
-                            {{ touch.defense_parry_type }} {{ touch.defense_parry_number }} ({{ touch.defense_parry_quality }})
+                            <div>Type: {{ touch.defense_parry_type }}</div>
+                            <div>Number: {{ touch.defense_parry_number }}</div>
+                            <div>Quality: {{ touch.defense_parry_quality }}</div>
                         {% else %}
                             None
                         {% endif %}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         {% if touch.evasion_type != 'none' %}
-                            {{ touch.evasion_type }} ({{ touch.evasion_success }})
+                            <div>Type: {{ touch.evasion_type }}</div>
+                            <div>Timing: {{ touch.evasion_timing }}</div>
+                            <div>Success: {{ touch.evasion_success }}</div>
+                            <div>Follow-up: {{ touch.evasion_follow_up }}</div>
                         {% else %}
                             None
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div>Priority: {{ touch.outcome_priority }}</div>
+                        <div>Quality: {{ touch.outcome_quality }}</div>
+                        <div>Call: {{ touch.outcome_referee_call }}</div>
+                        <div>Card: {{ touch.outcome_card }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% if touch.video_id %}
+                            <div>ID: {{ touch.video_id }}</div>
+                            <div>Start: {{ touch.video_timestamp_start }}</div>
+                            <div>End: {{ touch.video_timestamp_end }}</div>
+                        {% else %}
+                            No video
                         {% endif %}
                     </td>
                 </tr>
