@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-6">New Bout</h1>
+    
+    <!-- Context Section -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 class="text-xl font-semibold mb-4">Bout Details</h2>
+        <form id="boutForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Fencer A</label>
+                    <input type="text" name="fencer_a" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Fencer B</label>
+                    <input type="text" name="fencer_b" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Bout Type</label>
+                    <select name="bout_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="pool">Pool</option>
+                        <option value="de">DE</option>
+                        <option value="practice">Practice</option>
+                        <option value="lesson">Lesson</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Round</label>
+                    <select name="bout_round" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Timer Section -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <div class="flex justify-between items-center">
+            <div id="timer" class="text-4xl font-mono">00:00</div>
+            <div class="space-x-4">
+                <button id="startBtn" 
+                        class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                        hx-post="/api/bout/1/timer/start"
+                        hx-swap="none">
+                    Start
+                </button>
+                <button id="stopBtn" 
+                        class="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        hx-post="/api/bout/1/timer/stop"
+                        hx-swap="none">
+                    Stop
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Touch Recording Section -->
+    <div id="touchForm" class="bg-white p-6 rounded-lg shadow" style="display: none;">
+        <h2 class="text-xl font-semibold mb-4">Record Touch</h2>
+        <form class="space-y-4" hx-post="/api/bout/1/touch" hx-swap="none">
+            <input type="hidden" name="seconds_from_start" id="secondsFromStart">
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Scorer</label>
+                    <select name="scorer" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="fencer_a">Fencer A</option>
+                        <option value="fencer_b">Fencer B</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Action Type</label>
+                    <select name="action_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="attack">Attack</option>
+                        <option value="riposte">Riposte</option>
+                        <option value="counter_attack">Counter Attack</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Record Touch
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+let startTime;
+let timerInterval;
+
+document.getElementById('startBtn').addEventListener('click', function() {
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+    document.getElementById('touchForm').style.display = 'none';
+});
+
+document.getElementById('stopBtn').addEventListener('click', function() {
+    clearInterval(timerInterval);
+    document.getElementById('touchForm').style.display = 'block';
+    document.getElementById('secondsFromStart').value = Math.floor((Date.now() - startTime) / 1000);
+});
+
+function updateTimer() {
+    const seconds = Math.floor((Date.now() - startTime) / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    document.getElementById('timer').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+</script>
+{% endblock %}
