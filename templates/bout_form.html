@@ -132,7 +132,7 @@
                     </select>
                 </div>
 
-                <!-- Target and Position -->
+                <!-- Hit Details -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Line</label>
                     <select name="line" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
@@ -157,6 +157,90 @@
                         <option value="thigh">Thigh</option>
                     </select>
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Hit Timing</label>
+                    <select name="hit_timing" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="immediate">Immediate</option>
+                        <option value="delayed">Delayed</option>
+                        <option value="stop_hit">Stop Hit</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Piste Position</label>
+                    <select name="piste_position" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="far_left">Far Left</option>
+                        <option value="left">Left</option>
+                        <option value="center">Center</option>
+                        <option value="right">Right</option>
+                        <option value="far_right">Far Right</option>
+                    </select>
+                </div>
+
+                <!-- Defense -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Parry Type</label>
+                    <select name="parry_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="simple">Simple</option>
+                        <option value="circular">Circular</option>
+                        <option value="counter">Counter</option>
+                        <option value="semi_circular">Semi-Circular</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Parry Number</label>
+                    <select name="parry_number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="prime">Prime</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Parry Quality</label>
+                    <select name="parry_quality" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="clean">Clean</option>
+                        <option value="beat_parry">Beat Parry</option>
+                        <option value="yielding">Yielding</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+
+                <!-- Body Evasion -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Evasion Type</label>
+                    <select name="evasion_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="distance">Distance</option>
+                        <option value="lateral">Lateral</option>
+                        <option value="rotational">Rotational</option>
+                        <option value="combined">Combined</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Evasion Timing</label>
+                    <select name="evasion_timing" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="before_attack">Before Attack</option>
+                        <option value="during_attack">During Attack</option>
+                        <option value="after_attack">After Attack</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Evasion Success</label>
+                    <select name="evasion_success" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="avoided_hit">Avoided Hit</option>
+                        <option value="partial_avoid">Partial Avoid</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Evasion Follow-up</label>
+                    <select name="evasion_follow_up" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="return_guard">Return to Guard</option>
+                        <option value="change_distance">Change Distance</option>
+                        <option value="change_line">Change Line</option>
+                        <option value="disengage">Disengage</option>
+                    </select>
+                </div>
             </div>
 
             <div class="flex justify-end">
@@ -178,6 +262,8 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quality</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Defense</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evasion</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200" id="touchesTableBody">
@@ -238,11 +324,25 @@ document.getElementById('touchRecordForm').addEventListener('submit', function(e
     qualityCell.className = 'px-6 py-4 whitespace-nowrap';
     qualityCell.textContent = formData.get('hit_quality');
     
+    const defenseCell = document.createElement('td');
+    defenseCell.className = 'px-6 py-4 whitespace-nowrap';
+    defenseCell.textContent = formData.get('parry_type') ? 
+        `${formData.get('parry_type')} ${formData.get('parry_number')} (${formData.get('parry_quality')})` : 
+        'None';
+    
+    const evasionCell = document.createElement('td');
+    evasionCell.className = 'px-6 py-4 whitespace-nowrap';
+    evasionCell.textContent = formData.get('evasion_type') ? 
+        `${formData.get('evasion_type')} (${formData.get('evasion_success')})` : 
+        'None';
+    
     tr.appendChild(timeCell);
     tr.appendChild(scorerCell);
     tr.appendChild(actionCell);
     tr.appendChild(targetCell);
     tr.appendChild(qualityCell);
+    tr.appendChild(defenseCell);
+    tr.appendChild(evasionCell);
     
     tbody.appendChild(tr);
     
