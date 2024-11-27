@@ -195,9 +195,16 @@
                 </div>
             </div>
 
-            <!-- Defense -->
+            <!-- Defense Toggle -->
             <div class="mb-6">
-                <h3 class="text-lg font-medium text-gray-900 mt-12 mb-4">Defense</h3>
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="defenseToggle" class="h-4 w-4 text-blue-600">
+                    <h3 class="text-lg font-medium text-gray-900">Defense</h3>
+                </div>
+            </div>
+
+            <!-- Defense Fields -->
+            <div class="mb-6" id="defenseSection" style="display: none;">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Parry Type</label>
@@ -236,9 +243,16 @@
                 </div>
             </div>
 
-            <!-- Body Evasion -->
+            <!-- Body Evasion Toggle -->
             <div class="mb-6">
-                <h3 class="text-lg font-medium text-gray-900 mt-12 mb-4">Body Evasion</h3>
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="evasionToggle" class="h-4 w-4 text-blue-600">
+                    <h3 class="text-lg font-medium text-gray-900">Body Evasion</h3>
+                </div>
+            </div>
+
+            <!-- Body Evasion Fields -->
+            <div class="mb-6" id="evasionSection" style="display: none;">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Evasion Type</label>
@@ -329,6 +343,15 @@ function updateTimer() {
     document.getElementById('timer').textContent = 
         `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
+
+// Toggle handlers for Defense and Evasion sections
+document.getElementById('defenseToggle').addEventListener('change', function() {
+    document.getElementById('defenseSection').style.display = this.checked ? 'block' : 'none';
+});
+
+document.getElementById('evasionToggle').addEventListener('change', function() {
+    document.getElementById('evasionSection').style.display = this.checked ? 'block' : 'none';
+});
 
 document.getElementById('touchRecordForm').addEventListener('submit', function(e) {
     e.preventDefault();
