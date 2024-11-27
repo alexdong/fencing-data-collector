@@ -84,20 +84,37 @@ def record_touch(bout_id):
     if bout is None:
         return jsonify({'error': 'Bout not found'}), 404
         
-    required_fields = ['seconds_from_start', 'scorer', 'action_type']
-    if not all(field in request.form for field in required_fields):
+    # Get all form data
+    data = request.form.to_dict()
+    
+    # Required fields validation
+    required_fields = ['seconds_from_start', 'scorer', 'primary_action']
+    if not all(field in data for field in required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
-        
-    # Validate action_type
-    if request.form['action_type'] not in ['attack', 'riposte', 'counter_attack']:
-        return jsonify({'error': 'Invalid action type'}), 400
-        
-    touch = Touches.create(
-        bout=bout,
-        seconds_from_start=request.form['seconds_from_start'],
-        scorer=request.form['scorer'],
-        action_type=request.form['action_type']
-    )
+    
+    # Create touch with all available fields
+    touch_data = {
+        'bout': bout,
+        'seconds_from_start': data['seconds_from_start'],
+        'scorer': data['scorer'],
+        'action_type': data['primary_action'],
+        # Optional fields with defaults
+        'prep_footwork': data.get('footwork', 'none'),
+        'prep_blade': data.get('blade_preparation', 'none'),
+        'distance': data.get('distance', 'medium'),
+        'hit_quality': data.get('hit_quality', 'clear'),
+        'hit_line': data.get('line', 'high_outside'),
+        'hit_target': data.get('specific_target', 'chest'),
+        'defense_parry_type': data.get('parry_type', 'none'),
+        'defense_parry_number': data.get('parry_number', 'none'),
+        'defense_parry_quality': data.get('parry_quality', 'none'),
+        'evasion_type': data.get('evasion_type', 'none'),
+        'evasion_timing': data.get('evasion_timing', 'none'),
+        'evasion_success': data.get('evasion_success', 'none'),
+        'evasion_follow_up': data.get('evasion_follow_up', 'none')
+    }
+    
+    touch = Touches.create(**touch_data)
     
     return jsonify({'success': True, 'touch_id': touch.id})
 
