@@ -62,10 +62,11 @@
     <!-- Touch Recording Section -->
     <div id="touchForm" class="bg-white p-6 rounded-lg shadow" style="display: none;">
         <h2 class="text-xl font-semibold mb-4">Record Touch</h2>
-        <form class="space-y-4" hx-post="/api/bout/1/touch" hx-swap="none">
+        <form id="touchRecordForm" class="space-y-4" hx-post="/api/bout/1/touch" hx-swap="none">
             <input type="hidden" name="seconds_from_start" id="secondsFromStart">
             
             <div class="grid grid-cols-2 gap-4">
+                <!-- Basic Info -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Scorer</label>
                     <select name="scorer" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
@@ -74,11 +75,86 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Action Type</label>
-                    <select name="action_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <label class="block text-sm font-medium text-gray-700">Primary Action</label>
+                    <select name="primary_action" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         <option value="attack">Attack</option>
                         <option value="riposte">Riposte</option>
                         <option value="counter_attack">Counter Attack</option>
+                        <option value="remise">Remise</option>
+                        <option value="counter_riposte">Counter Riposte</option>
+                        <option value="renewal">Renewal</option>
+                        <option value="point_in_line">Point in Line</option>
+                    </select>
+                </div>
+
+                <!-- Preparation -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Footwork</label>
+                    <select name="footwork" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="advance">Advance</option>
+                        <option value="retreat">Retreat</option>
+                        <option value="double_advance">Double Advance</option>
+                        <option value="double_retreat">Double Retreat</option>
+                        <option value="jump_forward">Jump Forward</option>
+                        <option value="jump_backward">Jump Backward</option>
+                        <option value="fleche">Fleche</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Blade Preparation</label>
+                    <select name="blade_preparation" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="engagement">Engagement</option>
+                        <option value="beat">Beat</option>
+                        <option value="press">Press</option>
+                        <option value="absence_of_blade">Absence of Blade</option>
+                        <option value="coupe">Coupe</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+
+                <!-- Distance and Hit Details -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Distance</label>
+                    <select name="distance" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="close">Close</option>
+                        <option value="medium">Medium</option>
+                        <option value="long">Long</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Hit Quality</label>
+                    <select name="hit_quality" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="clear">Clear</option>
+                        <option value="flat">Flat</option>
+                        <option value="grazing">Grazing</option>
+                        <option value="missed">Missed</option>
+                    </select>
+                </div>
+
+                <!-- Target and Position -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Line</label>
+                    <select name="line" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="high_outside">High Outside</option>
+                        <option value="high_inside">High Inside</option>
+                        <option value="low_outside">Low Outside</option>
+                        <option value="low_inside">Low Inside</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Specific Target</label>
+                    <select name="specific_target" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="toe">Toe</option>
+                        <option value="leg">Leg</option>
+                        <option value="hand">Hand</option>
+                        <option value="shoulder">Shoulder</option>
+                        <option value="chest">Chest</option>
+                        <option value="flank">Flank</option>
+                        <option value="arm">Arm</option>
+                        <option value="back">Back</option>
+                        <option value="head">Head</option>
+                        <option value="thigh">Thigh</option>
                     </select>
                 </div>
             </div>
@@ -89,6 +165,24 @@
                 </button>
             </div>
         </form>
+    </div>
+
+    <!-- Touches Table -->
+    <div id="touchesTable" class="bg-white p-6 rounded-lg shadow mt-6">
+        <h2 class="text-xl font-semibold mb-4">Recorded Touches</h2>
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scorer</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quality</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" id="touchesTableBody">
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -115,5 +209,46 @@ function updateTimer() {
     document.getElementById('timer').textContent = 
         `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
+
+document.getElementById('touchRecordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    // Add to table
+    const tbody = document.getElementById('touchesTableBody');
+    const tr = document.createElement('tr');
+    
+    const timeCell = document.createElement('td');
+    timeCell.className = 'px-6 py-4 whitespace-nowrap';
+    timeCell.textContent = document.getElementById('timer').textContent;
+    
+    const scorerCell = document.createElement('td');
+    scorerCell.className = 'px-6 py-4 whitespace-nowrap';
+    scorerCell.textContent = formData.get('scorer');
+    
+    const actionCell = document.createElement('td');
+    actionCell.className = 'px-6 py-4 whitespace-nowrap';
+    actionCell.textContent = formData.get('primary_action');
+    
+    const targetCell = document.createElement('td');
+    targetCell.className = 'px-6 py-4 whitespace-nowrap';
+    targetCell.textContent = `${formData.get('line')} - ${formData.get('specific_target')}`;
+    
+    const qualityCell = document.createElement('td');
+    qualityCell.className = 'px-6 py-4 whitespace-nowrap';
+    qualityCell.textContent = formData.get('hit_quality');
+    
+    tr.appendChild(timeCell);
+    tr.appendChild(scorerCell);
+    tr.appendChild(actionCell);
+    tr.appendChild(targetCell);
+    tr.appendChild(qualityCell);
+    
+    tbody.appendChild(tr);
+    
+    // Reset form
+    this.reset();
+    document.getElementById('touchForm').style.display = 'none';
+});
 </script>
 {% endblock %}
