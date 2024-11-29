@@ -26,48 +26,6 @@ MAX_DURATION = 780  # 13 minutes (with safety margin)
 WARNING_TIME = 30  # Warn when 30 seconds left
 
 
-def main() -> None:
-    if len(sys.argv) > 1:
-        with open(sys.argv[1], "rb") as audio_file:
-            transcript = transcribe_audio(audio_file)
-            subprocess.run("pbcopy", text=True, input=transcript)
-        print(f"\n[INFO] 📝 Transcript:\n✨ {transcript}")
-        print("\n[INFO] 📋 Copied to clipboard! 🎉")
-        return
-
-    print("[INFO] 🎯 Welcome to Whisper Audio Recorder!")
-    print("[INFO] Commands: 's' to start, 'q' to quit, Enter to stop recording")
-
-    while True:
-        sys.stdout.write("\r🎮 ")
-        sys.stdout.flush()
-        cmd = get_char_timeout(3600 * 24 * 7)  # 1 week timeout
-        if cmd:
-            print(cmd)  # Echo the character back
-            match cmd.lower():
-                case "q":
-                    print("\n[INFO] 👋 Goodbye!")
-                    break
-
-                case "s":
-                    temp_path = Path(
-                        f"/tmp/whisper_recording_{datetime.now().strftime('%Y%m%d_%H%M%S')}.wav"
-                    )
-
-                    # Record and save audio
-                    frames = record_audio()
-                    save_wav(frames, temp_path)
-
-                    # Transcribe and copy to clipboard
-                    with open(temp_path, "rb") as audio_file:
-                        transcript = transcribe_audio(audio_file)
-                        subprocess.run("pbcopy", text=True, input=transcript)
-
-                    print(f"\n[INFO] 📝 Transcript:\n✨ {transcript}")
-                    print("\n[INFO] 📋 Copied to clipboard! 🎉")
-                    print("\n[INFO] 🔄 Press 's' for new recording or 'q' to quit")
-
-
 def record_audio() -> List[bytes]:
     """Records audio until Enter is pressed. Returns raw audio frames."""
     print("[INFO] 🎤 Recording... (Press Enter to stop)")

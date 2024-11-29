@@ -1,12 +1,32 @@
-context:
-  weapon: [foil, epee, sabre]
-  fencer_left: string,
-  fencer_right: string,
-  bout_type: [pool, de, practice, lesson]
+You are a fencing coach and you are analysing a fencing bout between two fencers.
+You have recorded an analysis for a point and you need to convert it into a
+structured format for further analysis.
 
-hits:
-  - points: [integer, integer]
-    seconds: integer
+Take the recording transcript inside <Transcript></Transcript> and return a yaml
+structure according to the schema defined in <YAMLTemplate></YAMLTemplate> XML tag.  
+
+Please pay extra attention to the narrative field. Tell a story about
+how the attack was unfolded, what's the setup, what's the response, and how the
+point was scored. 
+
+<Weapon>{{ Weapon }}</Weapon>
+<Fencer>
+  <Left>{{ NameLeft }}</Left>
+  <Right>{{ NameRight }}</Right>
+</Fencer>
+<Bout>
+  <Period>{{ Period }}</Period>
+</Bout>
+<Scores>
+  <Left>{{ PointLeft }}</Left>
+  <Right>{{ PointRight }}</Right>
+</Scores>
+<Transcript>
+{{ transcript }}
+</Transcript>
+
+<YAMLTemplate>
+    points: [integer, integer]
     preparation:
       distance: [close, medium, long]
       footwork: [advance, retreat, jump_forward, jump_backward, fleche]
@@ -16,7 +36,6 @@ hits:
       feint_target_change: [high_low, inside_outside, same_line]
       taking_blade: [none, bind, envelopment, croise, opposition]
       tempo: [single, double, triple, broken]
-
     hit_details:
       action:
         [
@@ -31,16 +50,14 @@ hits:
       specific_target:
         [toe, leg, hand, shoulder, chest, flank, arm, back, head, thigh]
       piste_position: [far_left, left, center, right, far_right]
-
     defence?:
       parry: [simple, circular, counter, semi_circular]
       parry_number: [1, 2, 3, 4, 5, 6, 7, 8]
       parry_quality: [clean, beat_parry, yielding, failed]
-
     body_evasion?:
       type: [distance, lateral, rotational, combined]
       timing: [before_attack, during_attack, after_attack]
       success: [avoided_hit, partial_avoid, failed]
       follow_up: [return_guard, change_distance, change_line, disengage]
-
-    narrative?: string
+    narrative: string
+</YAMLTemplate>
